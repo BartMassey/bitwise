@@ -1,0 +1,1 @@
+/home/bart/Inform/Extensions/Bart Massey/Bitwise Operators.i7x
