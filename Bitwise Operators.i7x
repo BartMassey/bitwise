@@ -29,6 +29,8 @@ Include (-
   return A;
 ]; -).
 
+[ These are really only for Z-machine version 5 or later, but since the Inform 7 IDE doesn't seem to support earlier versions, I'm not going to worry about it. ]
+
 Section - Bit Shift Primitives (for Z-machine only)
 
 Include (-
@@ -59,7 +61,7 @@ To decide what number is (A - a number) bit-shr by (B - a number):
 
 Chapter - XOR
 
-[ Glulx includes an XOR opcode, but the Z machine does not. ]
+[ Glulx includes an XOR opcode, but the Z-machine does not. ]
 
 Section - XOR Phrases (for Glulx only)
 
@@ -77,7 +79,7 @@ Section - XOR Phrases (for Z-machine only)
 
 Include (-
 [ XOR a b;
-  return (a | b) & (~(a & b));
+  return (a | b) & ~(a & b);
 ]; -).
 
 To bit-xor (A - a number) into (B - an existing number variable):
@@ -114,36 +116,29 @@ The supported bitwise logical operators are "NOT", "AND", "OR", "XOR" (eXclusive
 	(number) bit-shl by (number)
 	(number) bit-shr by (number)
 
-It is useful to be able to modify variables "in-place". Bitwise NOT is the simplest case.
+It is useful to be able to modify variables "in-place". Bitwise NOT is the simplest case. Note that the variable argument N must be a local variable, not a global.
 
-	bit-negate (existing number variable)
+	bit-negate N
 
-For binary increment and decrement, the standard Inform 7
-syntax provides:
+For binary increment and decrement, the standard Inform 7 syntax provides:
 
-	increase (existing number variable) by (number)
-	decrease (existing number variable) by (number)
+	increase N by (number)
+	decrease N by (number)
 
 A similar syntax is used for bitwise shifts SHL and SHR.
 
-	bit-shl (existing number variable) by (number)
-	bit-shr (existing number variable) by (number)
+	bit-shl N by (number)
+	bit-shr N by (number)
 
 This right-to-left syntax is grammatically awkward for the binary logical operators. Bitwise AND, OR and XOR use a left-to-right construction with "into".
 
-	bit-and (number) into (existing number variable)
-	bit-or (number) into (existing number variable)
-	bit-xor (number) into (existing number variable)
+	bit-and (number) into N
+	bit-or (number) into N
+	bit-xor (number) into N
 
 Example: ** Behind This Door - Using bitwise operators in a puzzle.
 
-The classic "toggling lights" puzzle is the "Magic Square"
-mode of the 1978 Parker Brothers electronic game [italic
-type]Merlin.[roman type] There's a certain addictive
-fascination in figuring out what is going on with the
-lights. This is a much harder version of this "Lights Out"
-style of puzzle in that there are few regular patterns, but
-easier in that the search space is small.
+The classic "toggling lights" puzzle is the "Magic Square" mode of the 1978 Parker Brothers electronic game Merlin. There's a certain addictive fascination in figuring out what is going on with the lights. This is a much harder version of this "Lights Out" style of puzzle in that there are few regular patterns, but easier in that the search space is small.
 
 	*: "Behind This Door" by "Bart Massey".
 	
@@ -155,33 +150,31 @@ easier in that the search space is small.
 	
 	The exit door is a scenery door. It is north of the Antechamber and south of the Unreachable Room. It is closed and locked.
 	
-	The electronic pushbutton lock is scenery in the Antechamber. The description is "This peculiar lock has a horizontal row of buttons. Each button has a light behind it. The lights currently look like this:[state of the lights]". Understand "button" or "buttons" or "light" or "lights" as the electronic pushbutton lock.
+	The electronic pushbutton lock is scenery in the Antechamber. The description is "This peculiar lock has a horizontal row of buttons. Each button has a light in the center. The lights currently look like this:[state of the lights]". Understand "button" or "buttons" or "light" or "lights" as the electronic pushbutton lock.
 
-The puzzle size is configurable; it can be [italic type]N[roman type]x[italic type]N[roman type] for any [italic type]N[roman type] greater than one. The Table of Toggle Values, below, gives the full configuration of a particular puzzle instance. One must be careful with the entries here: it is easy to create an unsolvable puzzle. The table given follows the additional constraint, borrowed from Merlin, that pushing a given button always toggles the light at that button.
+The puzzle size is configurable; it can be NxN for any N greater than one. The Table of Toggle Values, below, gives the full configuration of a particular puzzle instance. One must be careful with the entries here: it is easy to create an unsolvable puzzle. The table given follows the additional constraint, borrowed from Merlin, that pushing a given button always toggles the light at that button.
 
-It would certainly be possible to write this game in pure Inform, representing each button and light with an object. However, this approach tends not to scale well. A lot of source text (and a lot of objects) end up being needed to implement a reasonable-sized puzzle.
+It would certainly be possible to write this game in pure Inform, representing each button and light with an object. However, this approach tends not to scale well. A lot of source text (and a high object count) ends up being needed to implement a reasonable-sized puzzle.
 
-	To decide which number is the puzzle-size: decide on the number of rows in the Table of Toggle Values.
+	The puzzle size is a number that varies. All-ones is a number that varies. The button state is a number that varies.
 	
-	To decide which number is all-ones: let M be 1 bit-shl by puzzle-size; decide on M - 1.
+	When play begins: now the puzzle size is the number of rows in the Table of Toggle Values; let M be 1 bit-shl by the puzzle size; now all-ones is M - 1; now the button state is all-ones.
 	
-	The button state is a number that varies. When play begins: now the button state is all-ones.
+	To say button instructions: say "You must press a button between 1 and [puzzle size] by number. For example, PRESS [puzzle size]."
 	
-	To say button instructions: say "You must press a button between 1 and [puzzle-size] by number. For example, PRESS [puzzle-size]."
-	
-	Pressing is an action applying to one value. Understand "button [number]" or "[number]" as "[button number]". Understand "press [button number]" or "push [button number]" or "touch [button number]" as pressing. Understand "push button/buttons" or "press button/buttons" or "touch button/buttons" as a mistake ("[button instructions]").
+	Pressing is an action applying to one value. Understand "button [number]" or "light [number]" or "[number]" as "[button number]". Understand "press [button number]" or "push [button number]" or "touch [button number]" as pressing. Understand "push button/buttons" or "press button/buttons" or "touch button/buttons" as a mistake ("[button instructions]").
 
 The lights are rendered as ASCII graphics, for lack of a better plan.
 
 	To say state of light (X - a number): let M be 1 bit-shl by X; let B be  the button state bit-and M; if B is 0, say "-"; otherwise say "*".
 	
-	To say state of the lights: say "[conditional paragraph break]    "; repeat with X running from 0 to puzzle-size - 1 begin; say state of light X; end repeat; say "[conditional paragraph break]".
+	To say state of the lights: say "[conditional paragraph break]    "; repeat with X running from 0 to the puzzle size - 1 begin; say state of light X; end repeat; say "[conditional paragraph break]".
 	
-	Check pressing a number (called N): if N < 1 or N > puzzle-size, instead say button instructions.
+	Check pressing a number (called N): if N is less than 1 or N is greater than the puzzle size, instead say button instructions.
 	
-	Carry out pressing a number (called N): let B be N - 1; let T be the Toggle Value in row N of the Table of Toggle Values; say "You see the buttons go from [state of the lights]"; now the button state is the button state bit-xor T; say "to [state of the lights]".
-	
-As mentioned earlier, this is [italic type]N[roman type] rows of [italic type]N-[roman type]bit numbers.
+	Carry out pressing a number (called N): let B be N - 1; let T be the Toggle Value in row N of the Table of Toggle Values; say "You see the lights go from [state of the lights]"; now the button state is the button state bit-xor T; say "to [state of the lights]".
+
+As mentioned earlier, this table is N rows of N-bit numbers.
 
 	Table of Toggle Values
 	Toggle Value
@@ -200,7 +193,7 @@ As mentioned earlier, this is [italic type]N[roman type] rows of [italic type]N-
 
 Spoiler Alert! Always good to check that the game is solvable.
 
-	Test me with "open entrance / open exit / x lock / push 1 / push 3 / push 5 / push 6 / n".
+	Test me with "n / s / x lock / push 1 / push 3 / push 5 / push 6 / n".
 	
 Example: ** Nimrod - Using bitwise XOR to play Nim.
 
@@ -279,8 +272,7 @@ Finally (finally!) the actual game mechanic is fairly simple.
 To test, it would be best to look at both winning and losing games.
 
 	Test winning with "take 1 stone from pit 1 / take 1 stone from pit 2 / take 1 stone from pit 1 / take 1 stone from pit 1 / take 1 stone from pit 3 / take 1 stone from pit 3 / take 1 stone from pit 3 / take 1 stone from pit 3".
-
-	Test losing with "take 3 stones from pit 1 / take 4 stones from pit 3 / take 1 stone from pit 2".
-
-	Test me with "test losing".
 	
+	Test losing with "take 3 stones from pit 1 / take 4 stones from pit 3 / take 1 stone from pit 2".
+	
+	Test me with "test losing".
