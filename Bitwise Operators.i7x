@@ -189,7 +189,7 @@ As mentioned earlier, this table is N rows of N-bit numbers.
 	
 	After pressing a number for the first time: say "Hmmm... Maybe if you could get all the lights turned off the door would unlock."
 	
-	Instead of going through the exit door: end the story saying "You made it! Just in time, too!".
+	Carry out going through the exit door: end the story saying "You made it! Just in time, too!".
 
 Spoiler Alert! Always good to check that the game is solvable.
 
