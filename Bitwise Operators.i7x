@@ -17,7 +17,7 @@ Chapter - Bit Shifts
 
 [ This is frustrating. The Z-machine (and Glulx?) includes shift instructions, but apparently Inform 6 not so much. ]
 
-Section - Bit Shift Primitives
+Section - Bit Shift Phrases
 
 Include (-
 [ SHL a b;
@@ -31,7 +31,11 @@ Include (-
   return a;
 ]; -).
 
-Section - Bit Shift Phrases
+To bit-shl (A - an existing number variable) by (B - a number):
+	(- {A} = SHL({A}, {B}); -).
+
+To bit-shr (A - an existing number variable) by (B - a number):
+	(- {A} = SHR({A}, {B}); -).
 
 To decide what number is (A - a number) bit-shl by (B - a number):
 	(- SHL({A}, {B}) -).
@@ -43,7 +47,17 @@ Chapter - XOR
 
 [ Glulx includes an XOR opcode, but the Z machine does not. ]
 
-Section - XOR Primitive
+Section - XOR Phrases (for Glulx only)
+
+To bit-xor (A - a number) into (B - an existing number variable):
+	(- @bitxor {A} {B} {B}; -)
+
+To decide what number is (A - a number) bit-xor (B - a number):
+	let C be B;
+	bit-xor A into C;
+        decide on C.
+
+Section - XOR Phrases (for Z-machine only)
 
 [ http://www.firthworks.com/roger/informfaq/tt.html#2 ]
 
@@ -52,12 +66,13 @@ Include (-
   return (a | b) & (~(a & b));
 ]; -).
 
-Section - XOR Phrases
+To bit-xor (A - a number) into (B - an existing number variable):
+	(- {B} = (XOR({A}, {B}); -)
 
 To decide what number is (A - a number) bit-xor (B - a number):
 	(- XOR({A}, {B}) -).
 
-Chapter - Assignment Phrases
+Chapter - Other Phrases
 
 [ Numbers by Krister Fundin showed me the pattern for this. ]
 
@@ -69,15 +84,6 @@ To bit-and (A - a number) into (B - an existing number variable):
 
 To bit-or (A - a number) into (B - an existing number variable):
 	(- {B} = {A} | {B}; -)
-
-To bit-xor (A - a number) into (B - an existing number variable):
-	(- {B} = (XOR({A}, {B}); -)
-
-To bit-shl (A - an existing number variable) by (B - a number):
-	(- {A} = SHL({A}, {B}); -).
-
-To bit-shr (A - an existing number variable) by (B - a number):
-	(- {A} = SHR({A}, {B}); -).
 
 Bitwise Operators ends here.
 
