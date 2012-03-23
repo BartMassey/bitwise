@@ -15,28 +15,42 @@ To decide what number is (A - a number) bit-or (B - a number):
 
 Chapter - Bit Shifts
 
-[ This is frustrating. The Z-machine (and Glulx?) includes shift instructions, but apparently Inform 6 not so much. ]
+[ This is frustrating. The Z-machine and Glulx both include shift instructions, but apparently Inform 6 not so much. ]
+
+Section - Bit Shift Primitives (for Glulx only)
+
+Include (-
+[ SHL A B;
+  @shiftl A B A;
+  return A;
+];
+[ SHR A B;
+  @sshiftr A B A;
+  return A;
+]; -).
+
+Section - Bit Shift Primitives (for Z-machine only)
+
+Include (-
+[ SHL A B;
+  @art_shift A B -> A;
+  return A;
+];
+[ SHR A B;
+  B = -B;
+  @art_shift A B -> A;
+  return A;
+]; -).
+
 
 Section - Bit Shift Phrases
 
-Include (-
-[ SHL a b;
-  if (b < 0) return SHR(a, -b);
-  while (b-- > 0 && a > 0) a = a * 2;
-  return a;
-];
-[ SHR a b;
-  if (b < 0) return SHL(a, -b);
-  while (b-- > 0 && a > 0) a = a / 2;
-  return a;
-]; -).
-
 To bit-shl (A - an existing number variable) by (B - a number):
 	(- {A} = SHL({A}, {B}); -).
-
-To bit-shr (A - an existing number variable) by (B - a number):
+        
+To bit-shl (A - an existing number variable) by (B - a number):
 	(- {A} = SHR({A}, {B}); -).
-
+        
 To decide what number is (A - a number) bit-shl by (B - a number):
 	(- SHL({A}, {B}) -).
 
