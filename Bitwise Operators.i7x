@@ -135,6 +135,73 @@ This right-to-left syntax is grammatically awkward for the binary logical operat
 	bit-or (number) into (existing number variable)
 	bit-xor (number) into (existing number variable)
 
+Example: ** Behind This Door - Using bitwise operators in a puzzle.
+
+The classic "toggling lights" puzzle is the "Magic Square"
+mode of the 1978 Parker Brothers electronic game [italic
+type]Merlin.[roman type] There's a certain addictive
+fascination in figuring out what is going on with the
+lights. This is a much harder version of this "Lights Out"
+style of puzzle in that there are few regular patterns, but
+easier in that the search space is small.
+
+	*: "Behind This Door" by "Bart Massey".
+	
+	Include Bitwise Operators by Bart Massey.
+	
+	The Antechamber is a room. "This barren metal room has two doors. The [entrance door] to the south is locked: can't go back now. The [exit door] to the north is locked as well, by an [electronic pushbutton lock] on the wall next to it."
+	
+	The entrance door is a scenery door. It is south of the Antechamber. It is closed and locked.
+	
+	The exit door is a scenery door. It is north of the Antechamber and south of the Unreachable Room. It is closed and locked.
+	
+	The electronic pushbutton lock is scenery in the Antechamber. The description is "This peculiar lock has a horizontal row of buttons. Each button has a light behind it. The lights currently look like this:[state of the lights]". Understand "button" or "buttons" or "light" or "lights" as the electronic pushbutton lock.
+
+The puzzle size is configurable; it can be [italic type]N[roman type]x[italic type]N[roman type] for any [italic type]N[roman type] greater than one. The Table of Toggle Values, below, gives the full configuration of a particular puzzle instance. One must be careful with the entries here: it is easy to create an unsolvable puzzle. The table given follows the additional constraint, borrowed from Merlin, that pushing a given button always toggles the light at that button.
+
+It would certainly be possible to write this game in pure Inform, representing each button and light with an object. However, this approach tends not to scale well. A lot of source text (and a lot of objects) end up being needed to implement a reasonable-sized puzzle.
+
+	To decide which number is the puzzle-size: decide on the number of rows in the Table of Toggle Values.
+	
+	To decide which number is all-ones: let M be 1 bit-shl by puzzle-size; decide on M - 1.
+	
+	The button state is a number that varies. When play begins: now the button state is all-ones.
+	
+	To say button instructions: say "You must press a button between 1 and [puzzle-size] by number. For example, PRESS [puzzle-size]."
+	
+	Pressing is an action applying to one value. Understand "button [number]" or "[number]" as "[button number]". Understand "press [button number]" or "push [button number]" or "touch [button number]" as pressing. Understand "push button/buttons" or "press button/buttons" or "touch button/buttons" as a mistake ("[button instructions]").
+
+The lights are rendered as ASCII graphics, for lack of a better plan.
+
+	To say state of light (X - a number): let M be 1 bit-shl by X; let B be  the button state bit-and M; if B is 0, say "-"; otherwise say "*".
+	
+	To say state of the lights: say "[conditional paragraph break]    "; repeat with X running from 0 to puzzle-size - 1 begin; say state of light X; end repeat; say "[conditional paragraph break]".
+	
+	Check pressing a number (called N): if N < 1 or N > puzzle-size, instead say button instructions.
+	
+	Carry out pressing a number (called N): let B be N - 1; let T be the Toggle Value in row N of the Table of Toggle Values; say "You see the buttons go from [state of the lights]"; now the button state is the button state bit-xor T; say "to [state of the lights]".
+	
+As mentioned earlier, this is [italic type]N[roman type] rows of [italic type]N-[roman type]bit numbers.
+
+	Table of Toggle Values
+	Toggle Value
+	42
+	18
+	25
+	22
+	11
+	7
+	
+	Report pressing a number: if the button state is not 0, continue the action; now the exit door is unlocked; now the button state is all-ones; say "You hear a loud click from the vicinity of the [exit door]."
+	
+	After pressing a number for the first time: say "Hmmm... Maybe if you could get all the lights turned off the door would unlock."
+	
+	Instead of going through the exit door: end the story saying "You made it! Just in time, too!".
+
+Spoiler Alert! Always good to check that the game is solvable.
+
+	Test me with "open entrance / open exit / x lock / push 1 / push 3 / push 5 / push 6 / n".
+	
 Example: ** Nimrod - Using bitwise XOR to play Nim.
 
 The game of Nim is a skill game in which players take turns taking stones from any one of a number pits until some player wins by taking the last stone. It turns out that a strategy involving XOR is optimal for this game. It is possible to play this strategy in your head, and easy for a computer to play it. Since Nimrod lets the player go first, it is possible for the player to force a win; if the player makes any mistakes, however, the player will lose.
