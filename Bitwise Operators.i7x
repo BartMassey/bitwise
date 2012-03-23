@@ -2,6 +2,8 @@ Bitwise Operators by Bart Massey begins here.
 
 "Provides phrases for bitwise arithmetic/logical operators."
 
+[ Released under the Creative Commons Attribution 3.0 United States license - http://creativecommons.org/licenses/by/3.0/us/ ]
+
 Chapter - Primitive Operators
 
 To decide what number is bit-not (A - a number):
