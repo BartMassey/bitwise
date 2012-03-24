@@ -53,7 +53,7 @@ Section - Bit Shift Phrases
 To bit-shl (A - an existing number variable) by (B - a number):
 	(- {A} = SHL({A}, {B}); -).
         
-To bit-shl (A - an existing number variable) by (B - a number):
+To bit-shr (A - an existing number variable) by (B - a number):
 	(- {A} = SHR({A}, {B}); -).
         
 To decide what number is (A - a number) bit-shl by (B - a number):
