@@ -4,7 +4,7 @@ Released under the Creative Commons Attribution 3.0 United States license:
 http://creativecommons.org/licenses/by/3.0/us/
 
 This Inform 7 extension provides phrases for bitwise
-arithmetic/logical operators. It is currently in alpha, but
+arithmetic/logical operators. After some user testing, it
 seems to work OK. There are a couple of large examples in
 the documentation.
 
