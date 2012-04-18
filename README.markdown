@@ -10,3 +10,6 @@ the documentation.
 
 More information about Inform 7 and extensions is available
 at: http://inform7.com
+
+The release version of this extension is available at:
+http://inform7.com/extensions/Bart%20Massey/Bitwise%20Operators/index.html
