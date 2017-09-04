@@ -86,7 +86,7 @@ Include (-
 ]; -).
 
 To bit-xor (A - a number) into (B - an existing number variable):
-	(- {B} = (XOR({A}, {B}); -)
+	(- {B} = XOR({A}, {B}); -)
 
 To decide what number is (A - a number) bit-xor (B - a number):
 	(- XOR({A}, {B}) -).
